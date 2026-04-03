@@ -1,0 +1,22 @@
+{
+  "name": "google-workspace-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Google Workspace MCP server with configurable permissions",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "auth": "tsx src/auth/auth-cli.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "googleapis": "^144.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}

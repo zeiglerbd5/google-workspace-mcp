@@ -1,0 +1,6 @@
+{
+  "gmail": "read+draft",
+  "calendar": "read+write",
+  "docs": "read+write",
+  "sheets": "read+write"
+}
