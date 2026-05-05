@@ -17,7 +17,7 @@ An MCP (Model Context Protocol) server that exposes Gmail, Google Calendar, Goog
 ### 1. Install
 
 ```bash
-git clone https://github.com/yourusername/google-workspace-mcp.git
+git clone https://github.com/zeiglerbd5/google-workspace-mcp.git
 cd google-workspace-mcp
 npm install
 npm run build
@@ -120,7 +120,7 @@ node dist/index.js
 
 ## Tools
 
-### Gmail (19 tools at `full`, 5 at `read+draft`)
+### Gmail
 
 | Tool | Permission | Description |
 |------|-----------|-------------|

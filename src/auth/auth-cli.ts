@@ -7,7 +7,8 @@
 
 import { createServer } from "node:http";
 import { URL } from "node:url";
-import { loadClientSecret, createOAuth2Client, saveTokens } from "./oauth.js";
+import { google } from "googleapis";
+import { loadClientSecret, saveTokens } from "./oauth.js";
 import { loadPermissions, computeScopes } from "../config/permissions.js";
 
 const clientSecretPath = process.env.GOOGLE_CLIENT_SECRET_PATH || "./client_secret.json";
@@ -30,7 +31,6 @@ const redirectUri = `http://127.0.0.1:${PORT}`;
 
 // Create OAuth2 client with the loopback redirect URI
 const { client_id, client_secret } = secret.installed;
-const { google } = await import("googleapis");
 const client = new google.auth.OAuth2(client_id, client_secret, redirectUri);
 
 const authUrl = client.generateAuthUrl({
@@ -68,8 +68,8 @@ const server = createServer(async (req, res) => {
     res.end("<h1>Authenticated!</h1><p>You can close this tab. Tokens saved.</p>");
 
     console.log(`\nTokens saved to ${tokensPath}`);
-    console.log("You can now copy this file to the VM:");
-    console.log(`  scp ${tokensPath} ubuntu@192.168.65.2:/home/ubuntu/google-workspace-mcp/tokens.json\n`);
+    console.log("If running on a headless server, copy this file there, e.g.:");
+    console.log(`  scp ${tokensPath} user@your-server:/path/to/google-workspace-mcp/tokens.json\n`);
 
     server.close();
     process.exit(0);
