@@ -37,6 +37,14 @@ function getHeader(headers: any[], name: string): string {
   return headers?.find((h: any) => h.name.toLowerCase() === name.toLowerCase())?.value || "";
 }
 
+// Reject CR/LF in header values to prevent SMTP header injection
+// (e.g. an attacker-controlled subject smuggling extra "Bcc:" lines).
+function assertNoCRLF(field: string, value: string): void {
+  if (/[\r\n]/.test(value)) {
+    throw new Error(`Invalid ${field}: line breaks are not allowed in email headers`);
+  }
+}
+
 export function registerGmailTools(server: McpServer, auth: OAuth2Client, level: PermissionLevel) {
   if (level === "off") return;
 
@@ -207,6 +215,10 @@ export function registerGmailTools(server: McpServer, auth: OAuth2Client, level:
         cc: z.string().optional().describe("CC recipients (comma-separated)"),
       },
       async ({ to, subject, body, cc }) => {
+        assertNoCRLF("to", to);
+        assertNoCRLF("subject", subject);
+        if (cc) assertNoCRLF("cc", cc);
+
         const headers = [
           `To: ${to}`,
           `Subject: ${subject}`,
@@ -246,6 +258,10 @@ export function registerGmailTools(server: McpServer, auth: OAuth2Client, level:
         cc: z.string().optional().describe("CC recipients (comma-separated)"),
       },
       async ({ to, subject, body, cc }) => {
+        assertNoCRLF("to", to);
+        assertNoCRLF("subject", subject);
+        if (cc) assertNoCRLF("cc", cc);
+
         const headers = [
           `To: ${to}`,
           `Subject: ${subject}`,

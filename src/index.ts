@@ -1,6 +1,6 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { getAuthenticatedClient } from "./auth/oauth.js";
-import { loadPermissions, computeScopes } from "./config/permissions.js";
+import { loadPermissions } from "./config/permissions.js";
 import { createServer } from "./server.js";
 
 const clientSecretPath = process.env.GOOGLE_CLIENT_SECRET_PATH || "./client_secret.json";
@@ -9,7 +9,6 @@ const permissionsPath = process.env.GWORKSPACE_PERMISSIONS_PATH || "./permission
 
 // Load permissions
 const permissions = loadPermissions(permissionsPath);
-const scopes = computeScopes(permissions);
 
 const enabledServices = Object.entries(permissions)
   .filter(([_, level]) => level !== "off")
