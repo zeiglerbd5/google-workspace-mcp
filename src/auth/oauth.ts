@@ -19,6 +19,17 @@ interface StoredTokens {
 }
 
 export function loadClientSecret(path: string): ClientSecret {
+  if (!existsSync(path)) {
+    throw new Error(
+      `OAuth client secret not found at '${path}'.\n\n` +
+      `To set up:\n` +
+      `  1. Create OAuth 2.0 credentials (Desktop app) at https://console.cloud.google.com/\n` +
+      `  2. Download the JSON and save it as 'client_secret.json' in the project root\n` +
+      `     (or set GOOGLE_CLIENT_SECRET_PATH to point at it).\n` +
+      `  3. Run 'npm run auth' to authenticate.\n\n` +
+      `See README.md for the full setup walkthrough.`
+    );
+  }
   return JSON.parse(readFileSync(path, "utf-8"));
 }
 

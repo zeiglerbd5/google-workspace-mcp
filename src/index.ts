@@ -7,22 +7,24 @@ const clientSecretPath = process.env.GOOGLE_CLIENT_SECRET_PATH || "./client_secr
 const tokensPath = process.env.GWORKSPACE_TOKENS_PATH || "./tokens.json";
 const permissionsPath = process.env.GWORKSPACE_PERMISSIONS_PATH || "./permissions.json";
 
-// Load permissions
-const permissions = loadPermissions(permissionsPath);
+try {
+  const permissions = loadPermissions(permissionsPath);
 
-const enabledServices = Object.entries(permissions)
-  .filter(([_, level]) => level !== "off")
-  .map(([service, level]) => `${service}:${level}`);
+  const enabledServices = Object.entries(permissions)
+    .filter(([_, level]) => level !== "off")
+    .map(([service, level]) => `${service}:${level}`);
 
-if (enabledServices.length === 0) {
-  console.error("No services enabled in permissions config. Nothing to do.");
+  if (enabledServices.length === 0) {
+    console.error("No services enabled in permissions config. Nothing to do.");
+    process.exit(1);
+  }
+
+  const auth = getAuthenticatedClient(clientSecretPath, tokensPath);
+
+  const server = createServer(auth, permissions);
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+} catch (err) {
+  console.error(err instanceof Error ? err.message : String(err));
   process.exit(1);
 }
-
-// Authenticate
-const auth = getAuthenticatedClient(clientSecretPath, tokensPath);
-
-// Create and start server
-const server = createServer(auth, permissions);
-const transport = new StdioServerTransport();
-await server.connect(transport);

@@ -4,8 +4,18 @@
   "type": "module",
   "description": "Google Workspace MCP server with configurable permissions",
   "main": "dist/index.js",
+  "author": "Brett Zeigler",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zeiglerbd5/google-workspace-mcp.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsc",
+    "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
     "auth": "tsx src/auth/auth-cli.ts"
   },
